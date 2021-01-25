@@ -1,0 +1,175 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Project</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						
+					</header>
+
+				<!-- Nav -->
+					<nav id="nav">
+						<ul class="links">
+							<li><a href="index.html">home</a></li>
+							<li ><a href="about_me.html">about me</a></li>
+						</ul>
+						<ul class="icons">
+							<li><a href="https://www.linkedin.com/in/paolo-italiani-957913203/" class="icon brands fa-linkedin"><span class="label">Linkedin</span></a></li>
+							<li><a href="https://github.com/paoloitaliani" class="icon brands fa-github"><span class="label">GitHub</span></a></li>
+						</ul>
+					</nav>
+
+				<!-- Main -->
+					<div id="main">
+
+						<!-- Post -->
+							<section class="post">
+								<header class="major">
+									
+									<h1>Multi-Class Text Classification</h1>
+									<p>Text multi-class classification project exploiting different techniques for vector representation of text and models.</p>
+                                </header>
+                                <style>
+                                    .img-container {
+                                      text-align: center;
+                                    }
+                                </style>
+                                <h2>Introduction</h2>
+                                <p>The aim of this project is to build a model that is able to assign to a document one of the following 9 classes: Agent, Place, Species, Work, Event, SportsSeason, UnitOfWork , TopicalConcept, Device. The data set used to train and test our models contains 342,782 wikipedia articles and it can be downloaded here. All the models I'm going to use for the classification step require continous explanatory variables, but in this case the only variable that we have at disposal is the text of the document. In order to solve this problem we can represent text or words of each documet as a numerical vector and this technique is called word embedding. Let's see how our target value is distributed.</p>
+                                <div class="img-container"><img src="images/text_class/image6.png" width=800 alt="" /></div>
+                                <p>We are in the case of an unbalanced data set, meaning that we have an unequal distribution of our classes. This might be a problem for our models, so we have to keep in mind this fact if we spot something strange in our classification.</p>
+                                <h2>Data Cleaning</h2>
+                                <p>One important step when we deal with textual data is the data cleaning process, basically it aims to delete all the elements of a document that are not useful for the analysis. Let's take a look how our documents look with an example:</p>
+                                <script src="https://gist.github.com/paoloitaliani/412038cfd074c319ec1f8cad2a9a6efb.js"></script>
+                                <p>As we can see our text is full of elements that are not going to improve our classification such as numbers and stopwords. Another good thing to do is to trasform all letters into lowercase. Let's see how our documents have changed.</p>
+                                <script src="https://gist.github.com/paoloitaliani/aa9abcebfbeed222526ccf1292cb44f4.js"></script>
+                                <p>Now it looks much better and we are done with text pre-processing</p>
+                                <h2>1. TF-IDF</h2>
+                                <p>As discussed in the introduction we have to change how the text of the documents is represented. In order to do so we can build vectors based on the term frequency–inverse document frequency (TF-IDF). This statistic evaluates how relevant a word is to a document in a collection of documents (corpus). The numeric vectors that represent each document in our corpus are made of the TF-IDF statistics computed for each word and document. I considered different models to perform the classification and a brief explanation of them is provided below.</p>
+                                <h3>Linear support-vector machine</h3>
+                                <p>SVMs are based on finding the "best" hyperplane that in a n-dimensional euclidean space is able to split two classes of a given dataset. By "best" I mean the hyperplane that is able to maximize the distance between the support vectors and the hyperplane itself. The support vectors are the closest points from both classes to the hyprplane. The following picture gives a more clear insight on how the hyperplane is defined in a very simple case, where we just have two explanatory variables and the hyperplane is a line.</p>
+                                <div class=" img-container "><img src="images/text_class/image1.png"  width=400 alt="" /></div>
+                                <p>SVMs don't support multi-class classification natively, but there are different approaches that solve this problem. The function LinearSVC from the scikit-learn package implements by default the One-vs-Rest approach that is based on splitting the multi-class dataset into multiple binary classification problems. An hyperplane is constructed for each class and each hyperplane separates the points of a the given class from the points of the remaining classes. The way this hyperplanes are defined is equivalent to the two classes case discussed above. The picture below shows a graphical representation of the hyperplanes in the case where we have only two explanatory variables</p>
+                                <div class="img-container"><img src="images/text_class/image2.png" width=400 alt="" /></div>
+                                <h3>Logistic Regression</h3>
+                                <p>Logistic regression as SVMs doesn't support multi-class classification natively. The One-vs-Rest approach can be again implemented, in this case it is based on training a logistic regression classifier for each class and then compute the conditional probability of belonging to the corresponding class given our data. The observation is then assigned to the class that maximizes this probability.</p>
+                                <h3>multinomial naive bayes</h3>
+                                <p>This model as the previous one is based on finding the class that maximizes the conditional probability of belongig to it given our data. The difference originates from how this probability is computed. Its computation is based on the bayes theorem and on the conditional indipendence between the feautures, that in our case are represented by the term frequencies–inverse document frequencies of words in each document. Below it is shown how the conditional probability of observing the k-th class, given the term frequencies–inverse document frequencies, is computed.</p>
+                                <div class="img-container"><img src="images/text_class/Screen Shot 2021-01-15 at 04.27.06.png" width=300 alt="" /></div>
+                                <h3>Random forest</h3>
+                                <p>Random forest is an ensamble approach based on grouping weak-learners (decision trees) providing a strong learner that is able to give more stable and accurate predictions. Basically we build a predefined number of trees considering for each of them a random subsample of our dataset. At each node m features selected at random are used to perform the binary split that maximizes the homogeneity of the target variable within the subsets created after the split. Each observation is classified according to the class that obtains the most number of votes by the random trees. The picture below shows the intuition behind this technique.</p>
+                                <div class="img-container"><img src="images/text_class/image4.jpg" width=700 alt="" /></div>
+                                <p>In this case I set a maximum depth of the trees equal to five, meaning that the length of the longest path from a root to a leaf is five and considered 100 trees. </p>
+                                <p>The results of the analysis are shown below</p>
+                                <div class="img-container"><img src="images/text_class/table1.png" width=300 alt="" /></div>
+                                <p>As we can see the best result in terms of accuracy is given by LinearSVC, also LogisticRegression performs really well and it is interesting how such simple models that are so inexpensive to train are able to predict our target variable so easily. Surprisingly RandomForestClassifier performs poorly, probably we can improve this model by changing its hyperparameters, but I don't think we are able to produce a nice result as the ones given by LogisticRegression and LinearSVC. Let's now try to get more insights by looking at the confusion matrix produced bt the linear SVM model</p>
+                                <div class="img-container"><img src="images/text_class/image5.png" width=850 alt="" /></div>
+                                <p>As we can see a great proportion of the observations is in the main diagonal of the confusion matrix, meaning that they are correctly classified. We can notice also that most of the documents that are misclassified come from the column of predicted documents as "agent" and the row of actual "agent" documents. The pattern that can be spotted in this column can be explained by the fact that we have an imbalanced data set, most of our documents are labeled as agent, so the model tends to be attracted by this class when making predictions even if an a mild way. </p>
+                                <h2>2.1 Embedding layer and Artificial neural networks</h2>
+                                <p>The embedding layer enables us to represent the words of our vocabulary as vectors. It is an improvement of representing each word using one-hot encoding because it produces dense low-dimensional vectors. Another interesting feature is that this word embeddings are not fixed as in the one-hot encoding case, in fact they are uptaded while training the neural network, that in this case deals with a classification problem.</p>
+                                <script src="https://gist.github.com/paoloitaliani/206cb2dd3a6773e8a62cee78e85e4c41.js"></script>
+                                <p>The documents have different lengths so in order to have vectors of the same length we use pad_sequences(). We also fix a max length for the documents equal to 100. Now the previous document looks like this. The Embedding layer is the first layer of our neural network and requires integer coded data as input, so each word has to be represented as an integer. For this analysis we want to consider just the 10000 most frequent words in our corpus. Now the first document in our data set looks like this. As we can see as the indexing decreases, the frequency of the word in our corpus increases.</p>
+                                <script src="https://gist.github.com/paoloitaliani/e9656487a2462d0ef1b3846d7989cc85.js"></script>
+                                <p>Now we are ready to define our model.</p>
+                                <div class="row">
+                                    <div class="col-6 col-12-small">
+
+                                        
+                                        <ul>
+                                            <li>Embedding Layer: The first layer as said before is the embedding layer and we have to specify our vacabulary size (10000), length of each document (100) and number of dimensions of the embedding space where each word is mapped to (50). The output of the embedding layer is going to be 100 vectors of 50 dimensios each, so if we want to plug it directly into the dense layer we need to flatten it to a single 5000 dimensions vector. </li>
+                                            <li>Output layer: The dense layer is also the output layer and has 9 nodes, one for each class that we want to predict. Given the fact that the classes are mutually exclusive we can use the softmax activation function, that is going to be applied to the vector s that gathers the 9 output nodes. This function squashes the vector s in the range (0, 1) and all the resulting elements add up to 1. </li>
+                                            <li>Loss function: Given that we have a multi-class classification problem we consider a Categorical Cross-Entropy loss that is defined in this way.</li>
+                                            <div href="https://www.codecogs.com/eqnedit.php?latex=CE&space;=&space;-\sum_{i}^{C}t_{i}&space;log&space;(s_{i})" target="_blank" class="img-container"><img src="https://latex.codecogs.com/gif.latex?CE&space;=&space;-\sum_{i}^{C}t_{i}&space;log&space;(s_{i})" width=200 alt="" /></div>
+                                            <li>Batch size: for this analysis I used the mini-batch gradient descent that splits the training set into batches (containing 64 documents in this case). Each batch is used to compute the gradient, so the weights are updated every time a batch is passed through the neural network.</li>
+                                        </ul>
+                                    </div>
+                                </div>  
+
+                                <p>Below it is shown the output from the output layer for a given document.</p>
+                                <script src="https://gist.github.com/paoloitaliani/ef99e9254540bc0513723d3b21ea0d35.js"></script>
+                                <p>As we can see the first element of the vector has the highest value, so the document is going to be classified to the first class. The confidence level is also very high so we are making a reliable prediction.</p>
+                                <script src="https://gist.github.com/paoloitaliani/9c27e4cbb65a4427b43f263bd61a97cb.js"></script>
+                                <p>We can see that the prediction is correct.</p>
+
+                                <div class="img-container"><img src="images/text_class/table2.png" width=350 alt="" /></div>
+                                <p>As we can see the model makes very accurate predictions, but still it is worse compared to linear SVM.</p>
+
+                                <h2>Embedding layer and recurrent neural networks (LSTM)</h2>
+
+                                <p>We can improve the previous model by trying to add context to word vectors and this can be done by using recurrent neural networks. Traditional neural networks all inputs as independent, but this doesn’t make much sense if those inputs represent words in a document. RNNs are able to connect previous information to the present task. The traditional RNNs however aren’t able to handle long-term dependencies, so when gap between the relevant information and the point where it is needed is large. Long Short Term Memory networks (LSTM) are a special case of RNNs that are able to handle long-term dependencies. One import element is the cell state that represents the memory of the LSTM and can be updated by forgetting or adding information. As all RNNs they have a chain structure of repeating modules. Each module has 4 interacting neural network layers and can splitted into 3 gates:</p>
+                                <div class="img-container"><img src="images/text_class/image8.png" width=600 alt="" /></div>
+                                
+                                <div class="row">
+                                    <div class="col-6 col-12-small">
+
+                                        
+                                        <ul>
+                                            <li>Forget gate: controls which information to discard from the cell state. </li>
+                                            <li>Input gate: decides which values we’ll update and creates a vector of new candidate values, this is creates an update of the cell state.</li>
+                                            <li>Output gate: decides what we’re going to output based on a filtered version of the cell state.</li>
+                                        </ul>
+                                    </div>
+                                </div>  
+
+                                <p>Now that we have defined the LSTM architecture we can implement it in our model. An important parameter that we have to specify is the number of modules in each LSTM cell, in this case I opted for 100. To better understand what I am talking about I find the following picture useful, where each circle represents a module as defined before. </p>
+                                <div class="img-container"><img src="images/text_class/image7.png" width=600 alt="" /></div>
+                                <p>The only difference from the previous model is the fact that I added the LSTM "layer" and increased the number of epochs to 5, because it seems to take more time to converge. Below you can find the results.</p>
+                                <div class="img-container"><img src="images/text_class/table4.png" width=350 alt="" /></div>
+                                <p>As we can see we got a slightly better result with respect to the previous model but at a big expense, the model takes a lot more time to train.</p>
+                                
+                                <h2>Pre-trained Word Embeddings</h2>
+                                <p>Pretrained Word Embeddings are the embeddings learned in one task that are used for solving another similar task that in this case it is classifying documents. When we built the embeddig layer in the previous paragraph, its weights were randomly initialized. One thing we can do is to use the pretrained word embeddings learned in a large data set instead of the randomly initialized ones. I used Stanford's  GloVe pre-trained word embeddings that can be downloaded <a href="https://nlp.stanford.edu/projects/glove/">here</a>. Below we have the results</p>
+                                <div class="img-container"><img src="images/text_class/table4.png" width=350 alt="" /></div>
+                                <p>Unfortunatly providing a smart initialization of our model didn't helped with improving our result.</p>
+                                <h2>Conclusions</h2>
+                                <p>We managed to build computationally inexpensive models that are able to produce very accurate classifications. It interesting how we can solve such a complicated problem in just few minutes. The complex and sophisticated LSTM model wasn't able to beat the simple SVM model.</p>
+
+                           </section>
+					</div>
+
+				<!-- Footer -->
+                <footer id="footer">
+						
+							
+					
+                    <section>
+                        <h3>Email</h3>
+                        <p><a href="#">paoita@hotmail.it</a></p>
+                    </section>
+                    <section>
+                        <h3>Social</h3>
+                        <ul class="icons alt">
+                            <li><a href="https://www.linkedin.com/in/paolo-italiani-957913203/" class="icon brands alt fa-linkedin"><span class="label">Linkedin</span></a></li>
+                            <li><a href="https://github.com/paoloitaliani" class="icon brands alt fa-github"><span class="label">GitHub</span></a></li>
+                        </ul>
+                    </section>
+                </section>
+            </footer>
+
+        <!-- Copyright -->
+            <div id="copyright">
+                <ul><li>&copy; Untitled</li><li>Design: <a href="https://html5up.net">HTML5 UP</a></li></ul>
+            </div>
+
+    </div>
+
+<!-- Scripts -->
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/jquery.scrollex.min.js"></script>
+    <script src="assets/js/jquery.scrolly.min.js"></script>
+    <script src="assets/js/browser.min.js"></script>
+    <script src="assets/js/breakpoints.min.js"></script>
+    <script src="assets/js/util.js"></script>
+    <script src="assets/js/main.js"></script>
+	</body>
+</html>
