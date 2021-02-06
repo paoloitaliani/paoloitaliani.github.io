@@ -41,12 +41,12 @@
                                 </header>
                                 <style>
                                     .img-container {
-                                      width: 100%;
-                                      height: auto;
+                                      
                                       text-align: center;
                                     }
                                 </style>
                                 <h2>Introduction</h2>
+                                
                                 <p>Object tracking is the process that starts with the detection of the object of interest and identification of its location in terms of bounding boxes, followed by tracking it as it moves across a series of video frames. The detection of the object of interest and the construction of its  bounding box is guaranteed in this project by a pre-trained Single-Shot Detector (weights and architecture of the caffe model can be obtained <a href="https://github.com/vinuvish/Face-detection-with-OpenCV-and-deep-learning/tree/master/models">here</a>).
                                     The understanding and implementation of SSD is beyond the scope of this project, so I am just going to provide a brief introduction of this detector and why I chose it.
                               
@@ -65,7 +65,7 @@
                                                 The first problem with this method is that the size of the window doesn’t guarantee us that the object is inside the
                                                 window. The second problem is related to the fact that objects con have different shapes so the window has to have the correct aspect ratio.
                                                 To solve this problems we have to try different sizes/shapes of sliding window but this is too computationally expensive.
-                                                <div class="img-container"><img src="images/Object_tracker/slidingwindow.gif" width=400 alt="" /></div>
+                                                <div class="image main2"><img src="images/Object_tracker/slidingwindow.gif" width=400 alt="" /></div>
 
                                             </li>
                                             <li>
@@ -80,7 +80,7 @@
                                                 Single-Shot Detector (SSD): it is a single-step approach as YOLO but is more accurate. The SSD consists of a backbone model and a SSD head. The backbone model is a pre-trained image classification network (where final fully connected classification layer has been removed)
                                                 and serves as a feature extractor. The SSD head adds convolutional layers to the backbone and outputs the bounding box of the object of interest.
                                                 in the figure below the white boxes represent the backbone model and the blue ones the SSD head.
-                                                <div class="img-container"><img src="images/Object_tracker/Image1.png" width=900 alt="" /></div>
+                                                <div class="image main"><img src="images/Object_tracker/Image1.png"  alt="" /></div>
 
                                             </li>
 
@@ -104,7 +104,7 @@
                                                 bounding boxes (obtained by SSD), related to each detected object of interest in the first frame of the video.
                                                 The centroid of each bounding box is computed and a unique ID is assigned to each of them. The figure below
                                                 gives a graphical representation of what is going on.
-                                                <div class="img-container"><img src="images/Object_tracker/image2.png" width=400 alt="" /></div>
+                                                <div class="image main2"><img src="images/Object_tracker/image2.png" width=400 alt="" /></div>
 
                                             </li>
 
@@ -118,7 +118,7 @@
                                                 euclidean distance between the 2 centroids. If this minimum centroid distance is greater than a given
                                                 threshold, or the number of objects detected in the current frame is greater than the number of objects
                                                 in the previous frame a new unique ID is assigned.
-                                                <div class="img-container"><img src="images/Object_tracker/image3.png" width=400 alt="" /></div>
+                                                <div class="image main2"><img src="images/Object_tracker/image3.png" width=400 alt="" /></div>
 
                                             </li>
                                         </ul>
