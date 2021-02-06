@@ -1,0 +1,170 @@
+!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Project</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						
+					</header>
+
+				<!-- Nav -->
+					<nav id="nav">
+						<ul class="links">
+							<li><a href="index.html">home</a></li>
+							<li ><a href="about_me.html">about me</a></li>
+						</ul>
+						<ul class="icons">
+							<li><a href="https://www.linkedin.com/in/paolo-italiani-957913203/" class="icon brands fa-linkedin"><span class="label">Linkedin</span></a></li>
+							<li><a href="https://github.com/paoloitaliani" class="icon brands fa-github"><span class="label">GitHub</span></a></li>
+						</ul>
+					</nav>
+
+				<!-- Main -->
+					<div id="main">
+
+						<!-- Post -->
+							<section class="post">
+								<header class="major">
+									
+									<h1>Object Tracking</h1>
+									<p>Object tracking project using centroid tracking algorithm</p>
+                                </header>
+                                <style>
+                                    .img-container {
+                                      width: 100%;
+                                      height: auto;
+                                      text-align: center;
+                                    }
+                                </style>
+                                <h2>Introduction</h2>
+                                <p>Object tracking is the process that starts with the detection of the object of interest and identification of its location in terms of bounding boxes, followed by tracking it as it moves across a series of video frames. The detection of the object of interest and the construction of its  bounding box is guaranteed in this project by a pre-trained Single-Shot Detector (weights and architecture of the caffe model can be obtained <a href="https://github.com/vinuvish/Face-detection-with-OpenCV-and-deep-learning/tree/master/models">here</a>).
+                                    The understanding and implementation of SSD is beyond the scope of this project, so I am just going to provide a brief introduction of this detector and why I chose it.
+                              
+                                </p>
+
+                                <h2>SSD why and how it works</h2>
+                                <p>
+                                    In the context of object detection there are different techniques that can be exploited:
+                                </p>
+                                <div class="row">
+                                    <div class="col-6 col-12-small">
+
+                                        
+                                        <ul>
+                                            <li>Window slider: a window is slid across the frame and the goal is to classify the image inside the window as desired type or not.
+                                                The first problem with this method is that the size of the window doesn’t guarantee us that the object is inside the
+                                                window. The second problem is related to the fact that objects con have different shapes so the window has to have the correct aspect ratio.
+                                                To solve this problems we have to try different sizes/shapes of sliding window but this is too computationally expensive.
+                                                <div class="img-container"><img src="images/Object_tracker/slidingwindow.gif" width=400 alt="" /></div>
+
+                                            </li>
+                                            <li>
+                                                R-CNN and Fast R-CNN: this methods use a two-step approach, first the regions where the object is expected to be are identified and then the object is detected considering only this regions.
+                                                This methods produce the most accurate detections but they are computationally expensive and this results in a slow frame rate when making real-time inference.
+
+                                            </li>
+                                            <li>
+                                                YOLO (You Only Look Once): it is a single-step approach so it is faster compared to R-CNN and Fast R-CNN, but it is less accurate.
+                                            </li>
+                                            <li>
+                                                Single-Shot Detector (SSD): it is a single-step approach as YOLO but is more accurate. The SSD consists of a backbone model and a SSD head. The backbone model is a pre-trained image classification network (where final fully connected classification layer has been removed)
+                                                and serves as a feature extractor. The SSD head adds convolutional layers to the backbone and outputs the bounding box of the object of interest.
+                                                in the figure below the white boxes represent the backbone model and the blue ones the SSD head.
+                                                <div class="img-container"><img src="images/Object_tracker/Image1.png" width=900 alt="" /></div>
+
+                                            </li>
+
+
+                                        </ul>
+                                    </div>
+                                
+                                </div>  
+
+                                <h2>Centroid tracking algorithm</h2>
+                                <p>Now that we have defined our object detector, we can exploit it to build our object tracker.
+                                    In order to do that I used a centroid tracking algorithm. This algorithm consists of five steps:
+                                </p>
+                                <div class="row">
+                                    <div class="col-6 col-12-small">
+
+                                        
+                                        <ul>
+                                            <li>
+                                                Step 1: the algorithm takes as input the set of x-y coordinates that define the 
+                                                bounding boxes (obtained by SSD), related to each detected object of interest in the first frame of the video.
+                                                The centroid of each bounding box is computed and a unique ID is assigned to each of them. The figure below
+                                                gives a graphical representation of what is going on.
+                                                <div class="img-container"><img src="images/Object_tracker/image2.png" width=400 alt="" /></div>
+
+                                            </li>
+
+                                            <li>
+                                                Step 2: for every subsequent frame in the video "step 1" is applied, but in this case 
+                                                we have to understand if we can to apply the old ID of the previous frame to the object detected in the current frame,
+                                                or assign a new unique ID. In other words we have to understand if the objects detected in the previous frame 
+                                                are the same objects that appear in the current frame. In order to do that we compute the euclidean distance
+                                                between all the centroids computed in the previous frame and the centroids computed in the new frame. 
+                                                The ID of the object in the previous frame is assigned to the object of the current frame that minimize the 
+                                                euclidean distance between the 2 centroids. If this minimum centroid distance is greater than a given
+                                                threshold, or the number of objects detected in the current frame is greater than the number of objects
+                                                in the previous frame a new unique ID is assigned.
+                                                <div class="img-container"><img src="images/Object_tracker/image3.png" width=400 alt="" /></div>
+
+                                            </li>
+                                        </ul>
+                                    </div>
+                                
+                                </div>  
+
+                            
+
+
+                           </section>
+					</div>
+
+				<!-- Footer -->
+                <footer id="footer">
+						
+							
+					
+                    <section>
+                        <h3>Email</h3>
+                        <p><a href="#">paoita@hotmail.it</a></p>
+                    </section>
+                    <section>
+                        <h3>Social</h3>
+                        <ul class="icons alt">
+                            <li><a href="https://www.linkedin.com/in/paolo-italiani-957913203/" class="icon brands alt fa-linkedin"><span class="label">Linkedin</span></a></li>
+                            <li><a href="https://github.com/paoloitaliani" class="icon brands alt fa-github"><span class="label">GitHub</span></a></li>
+                        </ul>
+                    </section>
+                </section>
+            </footer>
+
+        <!-- Copyright -->
+            <div id="copyright">
+                <ul><li>&copy; Untitled</li><li>Design: <a href="https://html5up.net">HTML5 UP</a></li></ul>
+            </div>
+
+    </div>
+
+<!-- Scripts -->
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/jquery.scrollex.min.js"></script>
+    <script src="assets/js/jquery.scrolly.min.js"></script>
+    <script src="assets/js/browser.min.js"></script>
+    <script src="assets/js/breakpoints.min.js"></script>
+    <script src="assets/js/util.js"></script>
+    <script src="assets/js/main.js"></script>
+	</body>
+</html>
