@@ -92,7 +92,7 @@
 
                                 <h2>Centroid tracking algorithm</h2>
                                 <p>Now that we have defined our object detector, we can exploit it to build our object tracker.
-                                    In order to do that I used a centroid tracking algorithm. This algorithm consists of five steps:
+                                    In order to do that I used a centroid tracking algorithm. This algorithm consists of 3 steps:
                                 </p>
                                 <div class="row">
                                     <div class="col-6 col-12-small">
@@ -114,15 +114,49 @@
                                                 or assign a new unique ID. In other words we have to understand if the objects detected in the previous frame 
                                                 are the same objects that appear in the current frame. In order to do that we compute the euclidean distance
                                                 between all the centroids computed in the previous frame and the centroids computed in the new frame. 
-                                                The ID of the object in the previous frame is assigned to the object of the current frame that minimize the 
+                                                The ID of the object in the previous frame is assigned to the object of the current frame that minimizes the 
                                                 euclidean distance between the 2 centroids. If this minimum centroid distance is greater than a given
                                                 threshold, or the number of objects detected in the current frame is greater than the number of objects
-                                                in the previous frame a new unique ID is assigned.
+                                                in the previous frame a new unique ID is assigned. The centroids of each object are updated and this step can 
+                                                be repeated for every frame in the video.
                                                 <div class="image main2"><img src="images/Object_tracker/image3.png" width=400 alt="" /></div>
 
                                             </li>
+
+                                            <li>
+                                                Step 3: An import step is to deregister old objects that left the field of view or in practice
+                                                that can't be matched to any existing object for a total of N subsequent frames.
+                                            </li>
+
+
                                         </ul>
                                     </div>
+                                    <h2>centroid object tracking results</h2>
+                                    <p> Now let's see the centroid object tracker at work. In this example the object of inference is a generic human face.
+                                        
+
+                                    </p>
+                                    <div class="image main2"><img src="images/Object_tracker/gif2.gif" width=400 alt="" /></div>
+                                    <p>As we can see the  gif shows that the tracker works, as my face 
+                                        moves between frames, the algorithm is able to capture this movements
+                                        and to build a bounding box around it.
+                                    </p>
+                                    <div class="image main2"><img src="images/Object_tracker/gif3.gif" width=400 alt="" /></div>
+                                    <p>As a new object is detected, the algorithm assigns to it a new unique ID. 
+                                        Furthermore the detector seems to work fine even if I tilt the phone.
+                                        I know it is kinda sad that I had to use a picture of myself instead
+                                        of a real person, but unfortunatly in this covid period having someone at disposal
+                                        is quite hard.
+                                    </p>
+                                    
+                                    <h2>Conclusions</h2>
+                                    <p>
+                                        As we can see using a pre-trained model for face detection and the centroid object 
+                                        tracker we were able to achieve a good result. The gifs look a bit laggy so defenetly
+                                        one thing to improve is the frame rate.
+                                    </p>
+
+
                                 
                                 </div>  
 

@@ -100,14 +100,14 @@
                                 </h4>
                                 <p>Now it is possible to associate to each tweet its polarity using the MyClassPolarity function. Specifying "bayes" as algorithm, tweets that have a ratio of positive and negative terms, that it is greater than 1, are classified as positive, those with a ratio lower than 1 as negative and those with a ratio equal to 1 (or where positive and negative terms do not appear) as neutral. The results have been reported below.
                                 </p>
-                                <div class="img-container"><img src="images/senta/image2.png" width=900 alt="" /></div>
+                                <div class="image main"><img src="images/senta/image2.png" width=900 alt="" /></div>
                                 <p>In order to have a more readable result, I reported the pie charts with the percentages of positive, negative and neutral tweets with respect to the 4 analyzes using the totals, hence the last rows of the table.</p>
-                                <div class="img-container"><img src="images/senta/image3.png" width=900 alt="" /></div>
+                                <div class="image main"><img src="images/senta/image3.png" width=900 alt="" /></div>
                                 <p></p>
                                 <p></p>
                                 <h4>1.4 Results Overview</h4>
                                 <p>As we can see, the outcomes produced by Sentix and DPL are quite similar to each other. The work done with Sentix is also similar to the one done with ItalWordNet, in particular regarding the percentage of negative tweets. The analysis made with the Subjetivity Lexicon instead, differs from all the others, only the percentage of positive tweets is similar to the one of ItalWordNet and Sentix. The Subjetivity Lexicon dictionary distributes tweets between the different polarities in a excessively democratic way, perhaps underestimating the presence of a fair portion of tweets that are neutral. This dictionary is therefore the most sensitive to positive and negative elements, nevertheless it is difficult to say whether it is a good or a bad thing according to this results. The Distributional Polarity Lexicon on the other hand has the opposite behavior, assigning a large number of tweets to neutral class. Sentix and ItalWordNet seem to represent a compromise between the two.To understand the origin of this discrepancies, I built 4 word clouds for each dictionary using the 981 tweets containing the word Salvini. This graphs show the terms with the highest frequency within each class (positive, negative and neutral). Wordclouds of this type can be created using the comparison.cloud function.</p>
-                                <div class="img-container"><img src="images/senta/image4.png" width=900 alt="" /></div>
+                                <div class="image main"><img src="images/senta/image4.png" width=900 alt="" /></div>
                                 <p>As we can see there are significant differences between the word clouds, very few terms appear in more than one cloud and if this happens, sometimes they belong to different classes. The most striking example is the one of the term "radicale", that in the graph related to the analysis done with Subjectivity Lexicon is classified as negative, but in the ones done with Distributional Polarity Lexicon and Sentix is classified as positive. Other terms also follow a different classification such as "migranti", "sicurezza", "soldo" and so on. These differences had an important role in producing discrepancies in the classifications of the tweets, given that these terms are the most frequent ones.
                                 </p>
                                 <h3>Chapter 2: Evaluation of the dictionaries used</h3>
@@ -169,7 +169,7 @@
                                     </div>
                                 </div> 
                                 <p>Below the table with the results is reported.</p>
-                                <div class="img-container"><img src="images/senta/Picture15.png" width=800 alt="" /></div>
+                                <div class="image main3"><img src="images/senta/Picture15.png" width=800 alt="" /></div>
                                 <p></p>
                                 <p>As we can see in this case the results suggest a convergence between the different analyzes, only those carried out with the DPL and Sentix seem to produce less accurate classifications. Between 41-44% of cases were assigned correctly, the most accurately assigned reviews were the negative ones, followed by the positive and neutral ones. We can say that the analyzes carried out with ItalWordNet and Subjectivity Lexicon have produced better results, perhaps because the transformation of the information contained in Sentix and DPL, from quantitative to qualitative, has distorted their characteristics, certainly leading to a loss of information.</p>
                                 <h3>Final Considerations</h3>
