@@ -61,7 +61,8 @@
 
                                         
                                         <ul>
-                                            <li>Window slider: a window is slid across the frame and the goal is to classify the image inside the window as desired type or not.
+                                            <li>Window slider: Instead of feeding the whole frame to the model, a window is slid across it and hopefully the object of interest will fall inside the window. The bounding boxes
+                                                are going to be represented by the window's contours when the object is detected.
                                                 The first problem with this method is that the size of the window doesn’t guarantee us that the object is inside the
                                                 window. The second problem is related to the fact that objects con have different shapes so the window has to have the correct aspect ratio.
                                                 To solve this problems we have to try different sizes/shapes of sliding window but this is too computationally expensive.
