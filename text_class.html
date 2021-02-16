@@ -123,7 +123,7 @@
                                     </div>
                                 </div>  
 
-                                <p>Now that we have defined the LSTM architecture we can implement it in our model. An important parameter that we have to specify is the number of modules in each LSTM cell, in this case I opted for 100. To better understand what I am talking about I find the following picture useful, where each circle represents a module as defined before. </p>
+                                <p>Now that we have defined the LSTM architecture we can implement it in our model. An important parameter that we have to specify is the number of modules in each LSTM cell, in this case I opted for 100. The more modules we introduce, the more elements in the text can be memorized by this architecture. To better understand what I am talking about I find the following picture useful, where each circle represents a module as defined before. </p>
                                 <div class="image main4"><img src="images/text_class/image7.png" width=600 alt="" /></div>
                                 <p>The only difference from the previous model is the fact that I added the LSTM "layer" and increased the number of epochs to 5, because it seems to take more time to converge. Below you can find the results.</p>
                                 <div class="img-container"><img src="images/text_class/table4.png" width=350 alt="" /></div>
